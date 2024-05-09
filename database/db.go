@@ -89,7 +89,7 @@ func Insert_Timer_Model(timer_model models.Timer_Model) {
 
 	// Prepare the SQL statement using placeholders for parameters
 	sql_statement := fmt.Sprintf(`
-        INSERT INTO SubmersibleTimers (fc, %s, %s)
+        INSERT INTO Submersible_Timers (fc, %s, %s)
         VALUES (?, ?, ?)
         ON CONFLICT (fc)
         DO UPDATE SET fc = ?, %s = ?, %s = ?;
@@ -101,7 +101,7 @@ func Insert_Timer_Model(timer_model models.Timer_Model) {
 		log.Fatal(err)
 	}
 
-	_, err = statement.Exec(timer_model.Fc_id, timer_model.Sub_id, timer_model.Return_time)
+	_, err = statement.Exec(timer_model.Fc_id, timer_model.Name, timer_model.Return_time, timer_model.Fc_id, timer_model.Name, timer_model.Return_time)
 	if err != nil {
 		log.Fatal(err)
 	}

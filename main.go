@@ -3,6 +3,7 @@ package main
 import (
 	"LootData4/GET"
 	"LootData4/POST"
+	ws "LootData4/websocket"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,11 +19,13 @@ func main() {
 	//GET
 	http.HandleFunc("/overview", GET.World_Status_Model_Handler)
 	http.HandleFunc("/report", GET.Loot_Model_Handler)
-	//need loot GET function still
+
+	//WS
+	http.HandleFunc("/ws", ws.Websocket_Handler)
 
 	// Start the server
 	fmt.Println("Starting server at port 8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":8000", nil); err != nil {
 		log.Fatal(err)
 	}
 }
