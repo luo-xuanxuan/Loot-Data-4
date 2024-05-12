@@ -11,6 +11,8 @@ import (
 
 func main() {
 
+	//db.Fix_DB()
+
 	//POSTS
 	http.HandleFunc("/", POST.Loot_Model_Handler)
 	http.HandleFunc("/resources", POST.Resource_Model_Handler)

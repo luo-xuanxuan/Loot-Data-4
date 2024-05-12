@@ -32,6 +32,37 @@ func init() {
 	statement.Exec()
 }
 
+func Fix_DB() {
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// List of integers to keep
+	keepList := []int{22500, 22501, 22502, 22503, 22504, 22505, 22506, 22507}
+
+	// Convert the list to a comma-separated string for the SQL query
+	var keepListStr string
+	for i, num := range keepList {
+		if i > 0 {
+			keepListStr += ","
+		}
+		keepListStr += fmt.Sprintf("%d", num)
+	}
+
+	// Delete rows that don't match the list of integers
+	deleteSQL := fmt.Sprintf(`
+		DELETE FROM Submersible_Loot
+		WHERE item NOT IN (%s);`, keepListStr)
+
+	_, err = db.Exec(deleteSQL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
 func Insert_Loot_Model(loot_model models.Loot_Model) {
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -80,7 +111,7 @@ func Insert_Resource_Model(resource_model models.Resource_Model) {
 func Insert_Timer_Model(timer_model models.Timer_Model) {
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	defer db.Close()
 
@@ -98,11 +129,11 @@ func Insert_Timer_Model(timer_model models.Timer_Model) {
 	// Prepare the statement
 	statement, err := db.Prepare(sql_statement)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	_, err = statement.Exec(timer_model.Fc_id, timer_model.Name, timer_model.Return_time, timer_model.Fc_id, timer_model.Name, timer_model.Return_time)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }

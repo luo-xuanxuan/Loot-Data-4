@@ -21,7 +21,6 @@ var upgrader = websocket.Upgrader{
 
 // Send a WebSocket message to all connected clients
 func Send_Websocket_Message(message []byte) {
-	fmt.Println(message)
 	// Broadcast to all connected clients
 	for client := range clients {
 		if err := client.WriteMessage(websocket.TextMessage, message); err != nil {
