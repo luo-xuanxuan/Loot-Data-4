@@ -3,6 +3,7 @@ package main
 import (
 	"LootData4/GET"
 	"LootData4/POST"
+	db "LootData4/database"
 	ws "LootData4/websocket"
 	"fmt"
 	"log"
@@ -11,7 +12,7 @@ import (
 
 func main() {
 
-	//db.Fix_DB()
+	db.Vacuum()
 
 	//POSTS
 	http.HandleFunc("/", POST.Loot_Model_Handler)

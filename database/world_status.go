@@ -16,14 +16,16 @@ func Select_World_Statuses() []*models.World_Status {
 
 	world_statuses := make(map[string]models.World_Status)
 
-	db, err := sql.Open("sqlite3", db_path)
+	db, err := sql.Open("sqlite3", db_path+"?_busy_timeout=5000")
 	if err != nil {
+		log.Print("opening")
 		log.Fatal(err)
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM FC_World")
 	if err != nil {
+		log.Print("query fc_world")
 		log.Fatal(err)
 	}
 
@@ -34,10 +36,11 @@ func Select_World_Statuses() []*models.World_Status {
 		var time int64
 		err = rows.Scan(&fc_id, &world, &name, &time)
 		if err != nil {
+			log.Print("scan fc_world")
 			log.Fatal(err)
 		}
 
-		name = Update_FC_Name(fc_id, world)
+		//name = Update_FC_Name(fc_id, world)
 
 		world_status, exists := world_statuses[world]
 
@@ -61,6 +64,7 @@ func Select_World_Statuses() []*models.World_Status {
 
 	rows, err = db.Query("SELECT * FROM Submersible_Resources")
 	if err != nil {
+		log.Print("query_resources")
 		log.Fatal(err)
 	}
 
@@ -70,6 +74,7 @@ func Select_World_Statuses() []*models.World_Status {
 		var repairs int
 		err = rows.Scan(&fc_id, &tanks, &repairs)
 		if err != nil {
+			log.Print("scan resources")
 			log.Fatal(err)
 		}
 
@@ -89,8 +94,10 @@ func Select_World_Statuses() []*models.World_Status {
 
 	rows, err = db.Query("SELECT * FROM Submersible_Timers")
 	if err != nil {
+		log.Print("query timers")
 		log.Fatal(err)
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var fc_id string
@@ -105,6 +112,7 @@ func Select_World_Statuses() []*models.World_Status {
 
 		err = rows.Scan(&fc_id, &sub_name_1, &return_time_1, &sub_name_2, &return_time_2, &sub_name_3, &return_time_3, &sub_name_4, &return_time_4)
 		if err != nil {
+			log.Print("scan timers")
 			log.Fatal(err)
 		}
 
